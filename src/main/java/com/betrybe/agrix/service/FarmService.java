@@ -70,7 +70,9 @@ public class FarmService {
       farmFromDb.setName(farm.getName());
     }
 
-    if (!farm.getName().isEmpty()) farmFromDb.setSize(farm.getSize());
+    if (!farm.getName().isEmpty()) {
+      farmFromDb.setSize(farm.getSize());
+    }
 
     return farmRepository.save(farmFromDb);
   }
