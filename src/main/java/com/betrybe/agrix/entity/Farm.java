@@ -6,6 +6,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+/**
+ * The type Farm.
+ */
 @Entity
 @Table(name = "farms")
 public class Farm {
@@ -17,29 +20,63 @@ public class Farm {
 
   private Double size;
 
+  /**
+   * Instantiates a new Farm.
+   */
   public Farm() {}
 
+  /**
+   * Instantiates a new Farm.
+   *
+   * @param name the name
+   * @param size the size
+   */
   public Farm(String name, Double size) {
     this.name = name;
     this.size = size;
   }
 
+  /**
+   * Gets id.
+   *
+   * @return the id
+   */
   public Long getId() {
     return id;
   }
 
+  /**
+   * Gets name.
+   *
+   * @return the name
+   */
   public String getName() {
     return name;
   }
 
+  /**
+   * Sets name.
+   *
+   * @param name the name
+   */
   public void setName(String name) {
     this.name = name;
   }
 
+  /**
+   * Gets size.
+   *
+   * @return the size
+   */
   public Double getSize() {
     return size;
   }
 
+  /**
+   * Sets size.
+   *
+   * @param size the size
+   */
   public void setSize(Double size) {
     this.size = size;
   }
