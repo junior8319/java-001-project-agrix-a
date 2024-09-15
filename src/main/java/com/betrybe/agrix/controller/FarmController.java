@@ -70,6 +70,24 @@ public class FarmController {
   }
 
   /**
+   * Gets crops from farm by farm id.
+   *
+   * @param id the id
+   * @return the crops from farm by farm id
+   * @throws FarmNotFoundException the farm not found exception
+   */
+  @GetMapping("/{id}/crops")
+  @ResponseStatus(HttpStatus.OK)
+  public List<CropDto> getCropsFromFarmByFarmId(
+      @PathVariable Long id
+  ) throws FarmNotFoundException {
+    return service.getCrops(id)
+        .stream()
+        .map(CropDto::fromEntity)
+        .toList();
+  }
+
+  /**
    * Create farm dto.
    *
    * @param farmCreationDto the farm creation dto
