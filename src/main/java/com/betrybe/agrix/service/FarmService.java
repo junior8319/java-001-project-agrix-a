@@ -70,7 +70,7 @@ public class FarmService {
       farmFromDb.setName(farm.getName());
     }
 
-    if (!(farm.getSize().isNaN()) && !(farm.getSize() == null) ) {
+    if (!(farm.getSize().isNaN()) && !(farm.getSize() == null)) {
       farmFromDb.setSize(farm.getSize());
     }
 
