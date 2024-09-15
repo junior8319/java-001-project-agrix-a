@@ -1,8 +1,14 @@
 package com.betrybe.agrix.controller;
 
+import com.betrybe.agrix.controller.dto.CropCreationDto;
+import com.betrybe.agrix.controller.dto.CropDto;
 import com.betrybe.agrix.controller.dto.FarmCreationDto;
 import com.betrybe.agrix.controller.dto.FarmDto;
+import com.betrybe.agrix.entity.Crop;
+import com.betrybe.agrix.entity.Farm;
+import com.betrybe.agrix.service.CropService;
 import com.betrybe.agrix.service.FarmService;
+import com.betrybe.agrix.service.exception.CropNotFoundException;
 import com.betrybe.agrix.service.exception.FarmNotFoundException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,15 +28,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/farms")
 public class FarmController {
   private final FarmService service;
+  private final CropService cropService;
 
   /**
    * Instantiates a new Farm controller.
    *
-   * @param service the service
+   * @param service     the service
+   * @param cropService the crop service
    */
   @Autowired
-  public FarmController(FarmService service) {
+  public FarmController(FarmService service, CropService cropService) {
     this.service = service;
+    this.cropService = cropService;
   }
 
   /**
@@ -70,5 +79,34 @@ public class FarmController {
   @ResponseStatus(HttpStatus.CREATED)
   public FarmDto createFarm(@RequestBody FarmCreationDto farmCreationDto) {
     return FarmDto.fromEntity(service.create(farmCreationDto.toEntity()));
+  }
+
+  /**
+   * Create crop to farm crop dto.
+   *
+   * @param farmId          the farm id
+   * @param cropCreationDto the crop creation dto
+   * @return the crop dto
+   * @throws FarmNotFoundException the farm not found exception
+   * @throws CropNotFoundException the crop not found exception
+   */
+  @PostMapping("/{farmId}/crops")
+  @ResponseStatus(HttpStatus.CREATED)
+  public CropDto createCropToFarm(
+      @PathVariable Long farmId,
+      @RequestBody CropCreationDto cropCreationDto
+  ) throws FarmNotFoundException, CropNotFoundException {
+    Crop cropToSave = new Crop(
+        cropCreationDto.name(),
+        cropCreationDto.plantedArea()
+    );
+
+    Farm farmToVinculate = service.findById(farmId);
+    Crop cropCreated = cropService.create(cropToSave);
+    cropCreated.setFarm(farmToVinculate);
+
+    cropService.setCropFarm(cropCreated.getId(), cropCreated.getFarmId());
+
+    return CropDto.fromEntity(cropCreated);
   }
 }
