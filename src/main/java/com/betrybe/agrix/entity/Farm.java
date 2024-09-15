@@ -22,7 +22,7 @@ public class Farm {
 
   private Double size;
 
-  @OneToMany(mappedBy = "crop")
+  @OneToMany(mappedBy = "farm")
   private List<Crop> crops;
 
   /**
