@@ -6,6 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,7 +24,7 @@ public class Farm {
   private Double size;
 
   @OneToMany(mappedBy = "farm")
-  private List<Crop> crops;
+  private List<Crop> crops = new ArrayList<>();
 
   /**
    * Instantiates a new Farm.
