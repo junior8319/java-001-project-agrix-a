@@ -3,10 +3,12 @@ package com.betrybe.agrix.controller;
 import com.betrybe.agrix.controller.dto.FarmCreationDto;
 import com.betrybe.agrix.controller.dto.FarmDto;
 import com.betrybe.agrix.service.FarmService;
+import com.betrybe.agrix.service.exception.FarmNotFoundException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,6 +45,19 @@ public class FarmController {
         .stream()
         .map(FarmDto::fromEntity)
         .toList();
+  }
+
+  /**
+   * Gets farm by id.
+   *
+   * @param id the id
+   * @return the farm by id
+   * @throws FarmNotFoundException the farm not found exception
+   */
+  @GetMapping("/{id}")
+  @ResponseStatus(HttpStatus.OK)
+  public FarmDto getFarmById(@PathVariable Long id) throws FarmNotFoundException {
+    return FarmDto.fromEntity(service.findById(id));
   }
 
   /**
