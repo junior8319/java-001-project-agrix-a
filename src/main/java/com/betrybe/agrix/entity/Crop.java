@@ -26,8 +26,6 @@ public class Crop {
   @JoinColumn(name = "farm_id")
   private Farm farm;
 
-  private Long farmId;
-
   /**
    * Instantiates a new Crop.
    */
@@ -38,12 +36,10 @@ public class Crop {
    *
    * @param name        the name
    * @param plantedArea the plantedArea
-   * @param farmId      the farm id
    */
-  public Crop(String name, Double plantedArea, Long farmId) {
+  public Crop(String name, Double plantedArea) {
     this.name = name;
     this.plantedArea = plantedArea;
-    this.farmId = farmId;
   }
 
   /**
@@ -103,9 +99,9 @@ public class Crop {
   /**
    * Sets farm.
    *
-   * @param id the id
+   * @param farm the farm
    */
-  public void setFarmId(Long id) {
-    this.farmId = id;
+  public void setFarm(Farm farm) {
+    this.farm = farm;
   }
 }
