@@ -7,8 +7,7 @@ import com.betrybe.agrix.entity.Crop;
  */
 public record CropCreationDto(
     String name,
-    Double plantedArea,
-    Long farmId
+    Double plantedArea
 ) {
 
   /**
@@ -17,6 +16,6 @@ public record CropCreationDto(
    * @return the crop
    */
   public Crop toEntity() {
-    return new Crop(name, plantedArea, farmId);
+    return new Crop(name, plantedArea);
   }
 }
