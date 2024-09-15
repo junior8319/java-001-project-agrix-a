@@ -1,8 +1,10 @@
 package com.betrybe.agrix.service;
 
 import com.betrybe.agrix.entity.Crop;
+import com.betrybe.agrix.entity.Farm;
 import com.betrybe.agrix.repository.CropRepository;
 import com.betrybe.agrix.service.exception.CropNotFoundException;
+import com.betrybe.agrix.service.exception.FarmNotFoundException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,15 +15,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class CropService {
   private final CropRepository cropRepository;
+  private final FarmService farmService;
 
   /**
    * Instantiates a new Crop service.
    *
    * @param cropRepository the crop repository
+   * @param farmService    the farm service
    */
   @Autowired
-  public CropService(CropRepository cropRepository) {
+  public CropService(CropRepository cropRepository, FarmService farmService) {
     this.cropRepository = cropRepository;
+    this.farmService = farmService;
   }
 
   /**
@@ -62,8 +67,10 @@ public class CropService {
    * @param cropWithChanges the crop with changes
    * @return the crop
    * @throws CropNotFoundException the crop not found exception
+   * @throws FarmNotFoundException the farm not found exception
    */
-  public Crop update(Long id, Crop cropWithChanges) throws CropNotFoundException {
+  public Crop update(Long id, Crop cropWithChanges)
+      throws CropNotFoundException, FarmNotFoundException {
     Crop cropToChange = findById(id);
 
     if (!cropWithChanges.getName().isEmpty() && !cropWithChanges.getName().isBlank()) {
@@ -75,7 +82,8 @@ public class CropService {
     }
 
     if (!(cropWithChanges.getFarmId() == null)) {
-      cropToChange.setFarmId(cropWithChanges.getFarmId());
+      Farm farmToVinculate = farmService.findById(cropWithChanges.getFarmId());
+      cropToChange.setFarm(farmToVinculate);
     }
 
     return cropRepository.save(cropToChange);
@@ -94,5 +102,41 @@ public class CropService {
     cropRepository.deleteById(id);
 
     return cropToExclude;
+  }
+
+  /**
+   * Sets crop farm.
+   *
+   * @param cropId the crop id
+   * @param farmId the farm id
+   * @return the crop farm
+   * @throws CropNotFoundException the crop not found exception
+   * @throws FarmNotFoundException the farm not found exception
+   */
+  public Crop setCropFarm(
+      Long cropId,
+      Long farmId
+  ) throws CropNotFoundException, FarmNotFoundException {
+    Crop crop = findById(cropId);
+    Farm farm = farmService.findById(farmId);
+
+    crop.setFarm(farm);
+
+    return cropRepository.save(crop);
+  }
+
+  /**
+   * Remove crop farm crop.
+   *
+   * @param cropId the crop id
+   * @return the crop
+   * @throws CropNotFoundException the crop not found exception
+   */
+  public Crop removeCropFarm(Long cropId) throws CropNotFoundException {
+    Crop crop = findById(cropId);
+
+    crop.setFarm(null);
+
+    return cropRepository.save(crop);
   }
 }
